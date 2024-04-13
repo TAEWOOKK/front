@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
+</head>
+<body>
+<input type="text" id="username" name="username"><br>
+<input type="text" id="password" name="password">
+<button type="button" onclick="login()">로그인</button>
+</body>
+<script>
+  function login(){
+    $.ajax({
+      type: "POST",
+      url: "http://localhost:8081/login",
+      dataType : 'text',
+      data : {
+        username : $('#username').val(),
+        password : $('#password').val()
+      },
+      success: function(data, textStatus, jqXHR) {
+        // Access the response headers
+        var authorizationHeader = jqXHR.getResponseHeader('Authorization');
+        if (authorizationHeader) {
+          alert('Authorization: ' + authorizationHeader);
+          localStorage.setItem('authorizationHeader', authorizationHeader);
+        }
+      },
+      error: function(xhr, status, error) {
+        console.log("Status: " + status);
+        console.log("Error: " + error);
+      }
+    });
+  }
+
+</script>
+</html>
