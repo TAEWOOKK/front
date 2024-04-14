@@ -1,24 +1,9 @@
 <!doctype html>
-<html class="no-js" lang="">
+<html>
 
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title></title>
-  <link rel="stylesheet" href="css/style.css">
-  <meta name="description" content="">
-
-  <meta property="og:title" content="">
-  <meta property="og:type" content="">
-  <meta property="og:url" content="">
-  <meta property="og:image" content="">
-
-  <link rel="icon" href="/favicon.ico" sizes="any">
-  <link rel="icon" href="/icon.svg" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="icon.png">
-
-  <link rel="manifest" href="site.webmanifest">
-  <meta name="theme-color" content="#fafafa">
   <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
 </head>
 
@@ -30,15 +15,21 @@
   <button type="button" onclick="location.href='login.html'">로그인</button>
   <button type="button" onclick="tokenenter()">토큰 값 확인</button>
   <button type="button" onclick="adminauth()">권한확인</button>
+  <button type="button" onclick="location.href='http://localhost:8081/oauth2/authorization/naver'">네이버로그인</button>
+  <button type="button" onclick="location.href='http://localhost:8081/oauth2/authorization/google'">구글 로그인</button>
   <button type="button" onclick="logout()">로그아웃</button>
 </body>
 <script>
   function tokenenter(){
-    const storedAuthorizationHeader = localStorage.getItem('authorizationHeader');
+    //const storedAuthorizationHeader = localStorage.getItem('authorizationHeader');
+    const storedAuthorizationHeader = get_cookie('Authorization');
     alert('저장된 Authorization 헤더: ' + storedAuthorizationHeader);
     $.ajax({
       url: 'http://localhost:8081/',
       type: 'GET',
+      xhrFields: {
+        withCredentials: true  // 쿠키를 함께 전송
+      },
       headers: {
         'Authorization': storedAuthorizationHeader  // Authorization 헤더에 인증 정보 설정
       },
@@ -59,6 +50,9 @@
     $.ajax({
       url: 'http://localhost:8081/admin',
       type: 'GET',
+      xhrFields: {
+        withCredentials: true  // 쿠키를 함께 전송
+      },
       headers: {
         'Authorization': storedAuthorizationHeader  // Authorization 헤더에 인증 정보 설정
       },
@@ -71,6 +65,11 @@
         console.error('요청 실패:', error);
       }
     });
+  }
+
+  function get_cookie(name) {
+    var value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+    return value? value[2] : null;
   }
 
   function logout() {
