@@ -10,70 +10,58 @@
 <body>
 
   <!-- Add your site or application content here -->
-  <p>Hello world! This is HTML5 Boilerplate.</p>
-  <script src="js/app.js"></script>
-  <button type="button" onclick="location.href='login.html'">로그인</button>
-  <button type="button" onclick="tokenenter()">토큰 값 확인</button>
+  <p>메인 페이지 입니다.</p>
+  <button type="button" onclick="location.href='signup.html'">회원가입 페이지 이동</button>
+  <button type="button" onclick="location.href='login.html'">로그인 페이지 이동</button>
+  <button type="button" onclick="user()">user 권한 확인</button>
   <button type="button" onclick="adminauth()">권한확인</button>
-  <button type="button" onclick="location.href='http://localhost:8081/oauth2/authorization/naver'">네이버로그인</button>
-  <button type="button" onclick="location.href='http://localhost:8081/oauth2/authorization/google'">구글 로그인</button>
   <button type="button" onclick="logout()">로그아웃</button>
 </body>
 <script>
-  function tokenenter(){
-    //const storedAuthorizationHeader = localStorage.getItem('authorizationHeader');
-    const storedAuthorizationHeader = get_cookie('Authorization');
-    alert('저장된 Authorization 헤더: ' + storedAuthorizationHeader);
+  function user(){
+
+    // 로컬 스토리지에서 'access'라는 키로 저장된 값 가져오기
+    var accessToken = localStorage.getItem('access');
+    console.log(accessToken)
     $.ajax({
-      url: 'http://localhost:8081/',
-      type: 'GET',
-      xhrFields: {
-        withCredentials: true  // 쿠키를 함께 전송
+      type: "GET",
+      url: "http://localhost:8081/user",
+      dataType : 'text',
+      beforeSend: function(xhr) {
+        // 'Authorization' 헤더에 가져온 accessToken 값을 추가
+        if(accessToken != null){
+          xhr.setRequestHeader('access',accessToken);
+        }else{
+          reissue();
+        }
       },
-      headers: {
-        'Authorization': storedAuthorizationHeader  // Authorization 헤더에 인증 정보 설정
-      },
-      success: function(data, status, xhr) {
-        // 성공적으로 요청을 보낸 경우 처리할 로직
-        console.log('요청 성공:', data);
+      success: function(data) {
+        alert(data);
       },
       error: function(xhr, status, error) {
-        // 요청이 실패한 경우 처리할 로직
-        console.error('요청 실패:', error);
+        console.log("Status: " + status);
+        console.log("Error: " + error);
       }
     });
   }
 
-  function adminauth(){
-    const storedAuthorizationHeader = localStorage.getItem('authorizationHeader');
-    alert('저장된 Authorization 헤더: ' + storedAuthorizationHeader);
+
+  function reissue(){
     $.ajax({
-      url: 'http://localhost:8081/admin',
-      type: 'GET',
+      type: "POST",
+      url: "http://localhost:8081/reissue",
+      dataType : 'text',
       xhrFields: {
-        withCredentials: true  // 쿠키를 함께 전송
+        withCredentials: true   // 쿠키를 요청 헤더에 포함
       },
-      headers: {
-        'Authorization': storedAuthorizationHeader  // Authorization 헤더에 인증 정보 설정
-      },
-      success: function(data, status, xhr) {
-        // 성공적으로 요청을 보낸 경우 처리할 로직
-        console.log('요청 성공:', data);
+      success: function(data) {
+        alert(data);
       },
       error: function(xhr, status, error) {
-        // 요청이 실패한 경우 처리할 로직
-        console.error('요청 실패:', error);
+        console.log("Status: " + status);
+        console.log("Error: " + error);
       }
     });
-  }
-
-  function get_cookie(name) {
-    var value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
-    return value? value[2] : null;
-  }
-
-  function logout() {
-    localStorage.removeItem('authorizationHeader');
   }
 </script>
 </html>
