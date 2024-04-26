@@ -63,5 +63,23 @@
       }
     });
   }
+
+  function logout(){
+    $.ajax({
+      type: "POST",
+      url: "http://localhost:8081/logout",
+      dataType : 'text',
+      xhrFields: {
+        withCredentials: true   // 쿠키를 요청 헤더에 포함
+      },
+      success: function(data) {
+        alert(data);
+      },
+      error: function(xhr, status, error) {
+        console.log("Status: " + status);
+        console.log("Error: " + error);
+      }
+    });
+  }
 </script>
 </html>
