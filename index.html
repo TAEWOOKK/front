@@ -47,6 +47,11 @@
 
 
   function reissue(){
+
+    var myCookie = getCookie("refresh");
+
+    console.log(myCookie);
+
     $.ajax({
       type: "POST",
       url: "http://localhost:8081/reissue",
@@ -80,6 +85,12 @@
         console.log("Error: " + error);
       }
     });
+  }
+
+  function getCookie(name) {
+    var value = "; " + document.cookie;
+    var parts = value.split("; " + name + "=");
+    if (parts.length === 2) return parts.pop().split(";").shift();
   }
 </script>
 </html>
