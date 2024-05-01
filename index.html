@@ -45,13 +45,44 @@
       success: function(data) {
         alert(data);
       },
-      error: function(xhr, status, error) {
+      error: function(request,xhr, status, error) {
         console.log("Status: " + status);
         console.log("Error: " + error);
+        alert(request.responseText);
+        reissue();
       }
     });
   }
 
+  function userinfo(){
+
+    // 로컬 스토리지에서 'access'라는 키로 저장된 값 가져오기
+    var accessToken = localStorage.getItem('access');
+    console.log(accessToken);
+
+    if(accessToken == null){
+      reissue();
+      return false;
+    }
+
+    $.ajax({
+      type: "POST",
+      url: "http://localhost:8081/userInfo",
+      headers: {
+        'access': accessToken
+      },
+      dataType : 'text',
+      success: function(data) {
+        alert(data);
+      },
+      error: function(request,xhr, status, error) {
+        console.log("Status: " + status);
+        console.log("Error: " + error);
+        alert(request.responseText);
+        reissue();
+      }
+    });
+  }
 
   function reissue(){
 
