@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>닉네임 재설정</title>
+  <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
+</head>
+<body>
+   닉네임을 입력해주세요: <input type="text" name="nickname" id="nickname">
+  <button type="button" id="button" onclick="nickNameMerge()">등록</button>
+</body>
+<script>
+  function nickNameMerge(){
+    // 로컬 스토리지에서 'access'라는 키로 저장된 값 가져오기
+    var accessToken = localStorage.getItem('access');
+    console.log(accessToken);
+
+    if(accessToken == null){
+      reissue();
+      return false;
+    }
+
+    $.ajax({
+      type: "POST",
+      url: "http://localhost:8081/nickNameMerge",
+      headers: {
+        'access': accessToken
+      },
+      dataType : 'text',
+      data : {
+        nickname : $('#nickname').val()
+      },
+      success: function(data) {
+        alert(data);
+        if(data == 'success'){
+          location.href = 'index.html';
+        }
+      },
+      error: function(request,xhr, status, error) {
+        console.log("Status: " + status);
+        console.log("Error: " + error);
+        alert(request.responseText);
+        reissue();
+      }
+    });
+  }
+
+
+  function reissue(){
+
+    console.log('토큰 재생성 프론트 로직');
+
+    $.ajax({
+      type: "POST",
+      url: "http://localhost:8081/reissue",
+      contentType: "application/json; charset=utf-8",
+      dataType: "text",
+      xhrFields: {
+        withCredentials: true // 클라이언트와 서버가 통신할때 쿠키 값을 공유하겠다는 설정
+      },
+      success: function(data, status, xhr) {
+        // 받은 access 값을 헤더에서 추출하여 로컬 스토리지에 저장
+        var access_token = xhr.getResponseHeader('access');
+        if (access_token) {
+          localStorage.setItem('access', access_token);
+          alert("Access token 저장됨: " + access_token);
+          nickNameMerge();
+        } else {
+          console.log("Access token이 헤더에 없습니다.");
+        }
+      },
+      error: function(request,xhr, status, error) {
+        console.log("Status: " + status);
+        console.log("Error: " + error);
+        alert(request.responseText);
+      }
+    });
+  }
+</script>
+</html>
