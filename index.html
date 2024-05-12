@@ -6,7 +6,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
 </head>
+<table id="movietable">
+  <thead>
+    <tr>
+      <th>제목</th>
+      <th>장르</th>
+      <th>포스터</th>
+    </tr>
+  </thead>
+  <tbody id="moviebody">
 
+  </tbody>
+</table>
 <body>
 
   <!-- Add your site or application content here -->
@@ -134,6 +145,66 @@
       }
     });
   }
+
+  $.ajax({
+    type: "POST",
+    url: "http://localhost:8081/movie/list",
+    contentType: "application/json; charset=utf-8",
+    dataType: "json",
+    success: function(list) {
+      var tbody = $('#moviebody');
+      $('#moviebody').empty();
+
+      list.forEach(function(item, index) {
+
+        var row = '<tr onclick="movieDetail(this)">';
+
+        var keys = ['id','title', 'genres', 'poster_path'];
+
+        keys.forEach(function(key) {
+
+          var value = item[key] ?? '';
+
+          if(key == 'genres'){
+
+            var genres = '';
+            value.forEach(function(key,index) {
+              var genre = key.name;
+              if(index === 0){
+                genres = genres+genre;
+              }else{
+                genres = genres+','+genre;
+              }
+
+            });
+            row += '<td class="text-center white-space-nowrap align-middle ' + key + '">' + genres + '</td>';
+          }else if(key == 'poster_path'){
+            row += '<td class="text-center white-space-nowrap align-middle ' + key + '"><img src="https://image.tmdb.org/t/p/w200/'+value+'"></td>';
+          }else if(key == 'id'){
+            row += '<td class="text-center white-space-nowrap align-middle ' + key + '" style="display: none;">'+ value +'</td>';
+          }else{
+            row += '<td class="text-center white-space-nowrap align-middle ' + key + '">' + value + '</td>';
+          }
+
+        });
+
+        row += '</tr>';
+        tbody.append(row);
+
+      });
+
+    },
+    error: function(request,xhr, status, error) {
+      console.log("Status: " + status);
+      console.log("Error: " + error);
+      alert(request.responseText);
+    }
+  });
+
+function movieDetail(row){
+  var id = $(row).find('td.id').text();
+  alert(id);
+}
 
 </script>
 </html>
