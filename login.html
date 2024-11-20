@@ -10,16 +10,16 @@
 &emsp;이메일 : <input type="text" id="username" name="username"><br>
 패스워드 : <input type="text" id="password" name="password">
 <button type="button" onclick="login()">로그인</button><br>
-<button type="button" onclick="location.href='http://localhost:8081/oauth2/authorization/naver'">네이버로그인</button>
-<button type="button" onclick="location.href='http://localhost:8081/oauth2/authorization/google'">구글 로그인</button>
-<button type="button" onclick="location.href='http://localhost:8081/oauth2/authorization/kakao'">카카오 로그인</button>
+<button type="button" onclick="location.href='http://cinetalk.kro.kr/oauth2/authorization/naver'">네이버로그인</button>
+<button type="button" onclick="location.href='http://cinetalk.kro.kr/oauth2/authorization/google'">구글 로그인</button>
+<button type="button" onclick="location.href='http://cinetalk.kro.kr/oauth2/authorization/kakao'">카카오 로그인</button>
 </body>
 <script>
   function login(){
 
     $.ajax({
       type: "POST",
-      url: "http://localhost:8081/login",
+      url: "http://cinetalk.kro.kr/login",
       dataType : 'text',
       data : {
         username : $('#username').val(),

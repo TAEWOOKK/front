@@ -6,20 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
 </head>
-<table id="movietable">
-  <thead>
-    <tr>
-      <th>제목</th>
-      <th>장르</th>
-      <th>포스터</th>
-    </tr>
-  </thead>
-  <tbody id="moviebody">
-
-  </tbody>
-</table>
-<body>
-
   <!-- Add your site or application content here -->
   <p>메인 페이지 입니다.</p>
   <!--<button type="button" onclick="location.href='signup.html'">회원가입 페이지 이동</button>-->
@@ -27,6 +13,20 @@
   <button type="button" onclick="user()">user 권한 확인</button>
   <button type="button" onclick="userinfo()">user 정보 확인</button>
   <button type="button" onclick="logout()">로그아웃</button>
+  <img class="rounded-circle" id="memberimage" src="data:image/jpeg;base64,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"/>
+<table id="movietable">
+  <thead>
+  <tr>
+    <th>제목</th>
+    <th>장르</th>
+    <th>포스터</th>
+  </tr>
+  </thead>
+  <tbody id="moviebody">
+
+  </tbody>
+</table>
+<body>
 </body>
 <script>
   var accessToken = localStorage.getItem('access');
@@ -48,7 +48,7 @@
 
     $.ajax({
       type: "GET",
-      url: "http://localhost:8081/user",
+      url: "http://cinetalk.kro.kr/user",
       headers: {
         'access': accessToken
       },
@@ -78,7 +78,7 @@
 
     $.ajax({
       type: "POST",
-      url: "http://localhost:8081/userInfo",
+      url: "http://cinetalk.kro.kr/userInfo",
       headers: {
         'access': accessToken
       },
@@ -101,7 +101,7 @@
 
     $.ajax({
       type: "POST",
-      url: "http://localhost:8081/reissue",
+      url: "http://cinetalk.kro.kr/reissue",
       contentType: "application/json; charset=utf-8",
       dataType: "text",
       xhrFields: {
@@ -128,7 +128,7 @@
   function logout(){
     $.ajax({
       type: "POST",
-      url: "http://localhost:8081/logout",
+      url: "http://cinetalk.kro.kr/logout",
       contentType: "application/json; charset=utf-8",
       dataType: "text",
       xhrFields: {
@@ -148,7 +148,7 @@
 
   $.ajax({
     type: "POST",
-    url: "http://localhost:8081/movie/list",
+    url: "http://cinetalk.kro.kr/movie/list",
     contentType: "application/json; charset=utf-8",
     dataType: "json",
     success: function(list) {
