@@ -15,17 +15,16 @@
   function signup(){
     $.ajax({
       type: "POST",
-      url: "http://localhost:8081/join",
-      dataType : 'text',
+      url: "http://localhost:8085/signUp",
+      dataType : 'json',
       data : {
         email : $('#email').val(),
         password : $('#password').val()
       },
       success: function(data) {
-        alert(data);
-        if(data == 'ok'){
-          alert('회원가입이 되었습니다.');
-          location.href = 'login.html';
+        alert(data.state);
+        if(data.state === true){
+          location.href = 'websocket_login.html';
         }
       },
       error: function(xhr, status, error) {
