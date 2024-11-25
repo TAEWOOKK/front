@@ -61,6 +61,15 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+  $(document).ready(function() {
+    // 입력 필드에서 Enter 키를 감지
+    $('#email, #password').on('keydown', function(e) {
+      if (e.key === 'Enter') { // Enter 키 확인
+        signUp(); // Sign Up 함수 호출
+      }
+    });
+  });
+
   function signUp() {
 
     $.ajax({

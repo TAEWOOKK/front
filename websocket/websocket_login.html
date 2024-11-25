@@ -61,6 +61,15 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+  $(document).ready(function() {
+    // 입력 필드에서 Enter 키를 감지
+    $('#email, #password').on('keydown', function(e) {
+      if (e.key === 'Enter') { // Enter 키 확인
+        signIn(); // Sign Up 함수 호출
+      }
+    });
+  });
+
   function signIn() {
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
@@ -71,6 +80,7 @@
       data: { email, password },
       success: function(data) {
         if (data.state === true) {
+          localStorage.setItem('email', email);
           alert("로그인 성공!");
           window.location.href = "websocket.html";
         } else {
